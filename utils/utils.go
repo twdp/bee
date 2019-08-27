@@ -51,17 +51,21 @@ func IsExist(path string) bool {
 
 // GetGOPATHs returns all paths in GOPATH variable.
 func GetGOPATHs() []string {
-	gopath := os.Getenv("GOPATH")
-	if gopath == "" && strings.Compare(runtime.Version(), "go1.8") >= 0 {
-		gopath = defaultGOPATH()
+	p, _ := os.Getwd()
+	return []string{
+		p,
 	}
-	return filepath.SplitList(gopath)
+	//gopath := os.Getenv("GOPATH")
+	//if gopath == "" && strings.Compare(runtime.Version(), "go1.8") >= 0 {
+	//	gopath = defaultGOPATH()
+	//}
+	//return filepath.SplitList(gopath)
 }
 
 // IsInGOPATH checks whether the path is inside of any GOPATH or not
 func IsInGOPATH(thePath string) bool {
 	for _, gopath := range GetGOPATHs() {
-		if strings.Contains(thePath, filepath.Join(gopath, "src")) {
+		if strings.Contains(thePath, gopath) {
 			return true
 		}
 	}
